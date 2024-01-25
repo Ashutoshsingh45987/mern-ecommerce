@@ -6,6 +6,11 @@ import authRoutes from "./routes/authRoute.js";
 
 dotenv.config();
 
+// database cnd
+
+connectDb();
+
+
 // rest object
 const app= express();
 
@@ -14,9 +19,15 @@ const app= express();
 app.use(express.json());
 
 
-// database cnd
+// port
 
-connectDb();
+const PORT= process.env.PORT;
+
+// console command
+app.listen( PORT, ()=>{
+    console.log(`The server is running on ${PORT}`.bgCyan.white);
+})
+
 
 // routes
 
@@ -27,13 +38,4 @@ app.get("/",(req,res)=>{
     res.send(
         "<h1>welcome to the ecommerce app</h1>"
     )
-})
-
-// port
-
-const PORT= process.env.PORT;
-
-// console command
-app.listen( PORT, ()=>{
-    console.log(`The server is running on ${PORT}`.bgCyan.white);
 })
