@@ -3,6 +3,7 @@ import colors from "colors";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
+import cors from 'cors';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const app= express();
 
 
 // middlewarre
+app.use(cors());
 app.use(express.json());
 
 
