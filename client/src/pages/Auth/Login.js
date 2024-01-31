@@ -19,7 +19,7 @@ import axios from 'axios';
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 import "../../styles/AuthStyles.css";
-
+import { useAuth } from '../../context/auth';
 
 
 function Copyright(props) {
@@ -45,6 +45,7 @@ export default function Login() {
     const [email,setEmail]= useState("");
     const [password,setPassword]= useState("");
     const navigate= useNavigate();
+    const [auth,setAuth]=useAuth();
     
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,9 +55,15 @@ export default function Login() {
         password,
         
       });
-      if ( res.data.success) {
+      if (  res.data.success) {
         toast.success(res.data.message);
         navigate("/");
+        setAuth({
+          ...auth,
+          user:res.data.user,
+          token: res.data.token
+        });
+        localStorage.setItem("auth",JSON.stringify(res.data))
       } else {
         toast.error(res.data.message);
       }
