@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Layout from '../../components/Layout/Layout';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +46,7 @@ export default function Login() {
     const [password,setPassword]= useState("");
     const navigate= useNavigate();
     const [auth,setAuth]=useAuth();
+    const location =useLocation();
     
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +58,7 @@ export default function Login() {
       });
       if (  res.data.success) {
         toast.success(res.data.message);
-        navigate("/");
+        navigate(location.state || "/");
         setAuth({
           ...auth,
           user:res.data.user,

@@ -100,7 +100,7 @@ export  const  loginController =async (req,res)=>{
             message:'login successfully',
             user:{
                 name:user.name,
-                emai:user.email,
+                email:user.email,
                 phone:user.phone,
                 address:user.address,
             },
