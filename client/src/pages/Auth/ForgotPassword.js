@@ -1,3 +1,5 @@
+
+import Layout from "../../components/Layout/Layout";
 import {useState} from 'react';
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -13,7 +15,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Layout from '../../components/Layout/Layout';
 import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
@@ -23,62 +24,53 @@ import { useAuth } from '../../context/auth';
 
 
 function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+    return (
+      <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        {'Copyright © '}
+        <Link color="inherit" href="https://mui.com/">
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+  
+  // TODO remove, this demo shouldn't need to reset the theme.
+  
+  const defaultTheme = createTheme();
 
-// TODO remove, this demo shouldn't need to reset the theme.
+export default function ForgotPassword(){
 
-const defaultTheme = createTheme();
-
-export default function Login() {
-
-    
     const [email,setEmail]= useState("");
-    const [password,setPassword]= useState("");
+    const [newPassword,setNewPassword]= useState("");
+    const [answer,setAnswer]= useState("");
     const navigate= useNavigate();
-    const [auth,setAuth]=useAuth();
-    const location =useLocation();
     
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/api/v1/auth/login', {
-        email,
-        password,
-        
-      });
-      if (  res.data.success) {
-        toast.success(res.data.message);
-        navigate(location.state || "/");
-        setAuth({
-          ...auth,
-          user:res.data.user,
-          token: res.data.token
-        });
-        localStorage.setItem("auth",JSON.stringify(res.data))
-      } else {
-        toast.error(res.data.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    }
-    
-  };
-
-  return (
-    <div className='form-container' >
-    <Layout  title={"Register-Ecommerce App"}>
-      <ThemeProvider theme={defaultTheme}>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        try {
+          const res = await axios.post('http://localhost:8080/api/v1/auth/forgot-password', {
+            email,
+            answer,
+            newPassword,
+          });
+      
+          if (res.data.success) {
+            toast.success(res.data.message);
+            navigate('/login');
+          } else {
+            toast.error(res.data.message);
+          }
+        } catch (error) {
+          console.error(error);
+          toast.error('Something went wrong');
+        }
+      };
+  return(
+    <Layout title={"Forgot-Password"}>
+        <ThemeProvider theme={defaultTheme}>
         <Container  component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -93,7 +85,7 @@ export default function Login() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Login
+              Reset Password
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
@@ -115,34 +107,39 @@ export default function Login() {
                   <TextField
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
+                    id="answer"
+                    label="Enter your favourite sport name"
+                    name="answer"
+                    autoComplete="answer"
+                    value={answer}
+                    onChange={(e)=>setAnswer(e.target.value)}
+                    
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="newPassword"
+                    label="newPassword"
+                    type="newPassword"
+                    id="newPassword"
+                    autoComplete="new-Password"
+                    value={newPassword}
+                    onChange={(e)=>setNewPassword(e.target.value)}
 
                   />
                 </Grid>
                 
               </Grid>
-              <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 1 }}
-                onClick={()=>{navigate('/forgot-password')}}
-              >
-                Forgot Password
-              </Button>
+             
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 1, mb: 2 }}
               >
-                Login
+                Reset
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
@@ -157,6 +154,7 @@ export default function Login() {
         </Container>
       </ThemeProvider>
     </Layout>
-      </div>
-  );
-}
+  ); 
+};
+
+

@@ -46,6 +46,7 @@ export default function Register() {
     const [phone,setPhone]= useState("");
     const [password,setPassword]= useState("");
     const [address,setAdress]= useState("");
+    const [answer,setAnswer]=useState("")
     const navigate= useNavigate();
     
   const handleSubmit = async (e) => {
@@ -57,6 +58,7 @@ export default function Register() {
         password,
         phone,
         address,
+        answer,
         
       });
       if ( res.data.success) {
@@ -159,6 +161,20 @@ export default function Register() {
                     autoComplete="new-Address"
                     value={address}
                     onChange={(e)=>setAdress(e.target.value)}
+
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="Answer"
+                    label="What is your favourite sports:"
+                    type="Answer"
+                    id="Answer"
+                    autoComplete="new-Answer"
+                    value={answer}
+                    onChange={(e)=>setAnswer(e.target.value)}
 
                   />
                 </Grid>
