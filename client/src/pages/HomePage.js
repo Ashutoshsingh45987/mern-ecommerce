@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./../components/Layout/Layout";
-
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
 const HomePage = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -55,8 +56,6 @@ const HomePage = () => {
   useEffect(() => {
     if (page === 1) return;
     loadMore();
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   //load more
   const loadMore = async () => {
@@ -83,12 +82,10 @@ const HomePage = () => {
   };
   useEffect(() => {
     if (!checked.length || !radio.length) getAllProducts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked.length, radio.length]);
 
   useEffect(() => {
     if (checked.length || radio.length) filterProduct();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked, radio]);
 
   //get filterd product
@@ -105,7 +102,7 @@ const HomePage = () => {
   };
   return (
     <Layout title={"ALl Products - Best offers "}>
-      <div className="container-fluid row mt-3 bg-gradient ">
+      <div className="container-fluid row mt-3">
         <div className="col-md-2">
           <h4 className="text-center">Filter By Category</h4>
           <div className="d-flex flex-column">
@@ -138,11 +135,11 @@ const HomePage = () => {
             </button>
           </div>
         </div>
-        <div className="col-md-9">
-          <h1 className="text-center  bg-light">All Products</h1>
+        <div className="col-md-9 offset-1">
+          <h1 className="text-center">All Products</h1>
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
-              <div className="card m-2 shadow-lg  " style={{ width: "18rem" }}>
+              <div className="card m-2" style={{ width: "18rem" }} key={p._id}>
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
@@ -154,8 +151,15 @@ const HomePage = () => {
                     {p.description.substring(0, 30)}...
                   </p>
                   <p className="card-text"> $ {p.price}</p>
-                  <button class="btn btn-primary ms-1">More Details</button>
-                  <button class="btn btn-secondary ms-1">ADD TO CART</button>
+                  <button
+                    className="btn btn-primary ms-1"
+                    onClick={() => navigate(`/product/${p.slug}`)}
+                  >
+                    More Details
+                  </button>
+                  <button className="btn btn-secondary ms-1">
+                    ADD TO CART
+                  </button>
                 </div>
               </div>
             ))}
