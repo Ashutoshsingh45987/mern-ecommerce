@@ -3,9 +3,13 @@ import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
 import SearchInput from "../form/SearchInput.js";
-import useCategory from "../../hooks/useCategory.js";
+import useCategory from "../../hooks/useCategory";
+import { useCart } from "../../context/cart";
+import { Badge } from "antd";
+
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const [cart] = useCart();
   const categories = useCategory();
   const handleLogout = () => {
     setAuth({
@@ -33,7 +37,7 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link to="/" className="navbar-brand">
-              🛒 Ecommerce App
+              WatchFlex
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <SearchInput />
@@ -119,9 +123,11 @@ const Header = () => {
                 </>
               )}
               <li className="nav-item">
-                <NavLink to="/cart" className="nav-link">
-                  Cart (0)
-                </NavLink>
+                <Badge count={cart?.length} showZero>
+                  <NavLink to="/cart" className="nav-link">
+                    Cart
+                  </NavLink>
+                </Badge>
               </li>
             </ul>
           </div>

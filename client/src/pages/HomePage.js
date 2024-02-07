@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
+import { useCart } from "../context/cart";
+import toast from "react-hot-toast";
+
 const HomePage = () => {
   const navigate = useNavigate();
+  const [cart, setCart] = useCart();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -103,6 +107,7 @@ const HomePage = () => {
   return (
     <Layout title={"ALl Products - Best offers "}>
       <div className="container-fluid row mt-3">
+        
         <div className="col-md-2">
           <h4 className="text-center">Filter By Category</h4>
           <div className="d-flex flex-column">
@@ -137,9 +142,44 @@ const HomePage = () => {
         </div>
         <div className="col-md-9 offset-1">
           <h1 className="text-center">All Products</h1>
+          <div
+            id="carouselExampleAutoplaying"
+            className="carousel slide"
+            data-bs-ride="carousel"
+          >
+            <div className="carousel-inner">
+              <div className="carousel-item active" >
+                <img src="/images/fa.jpg" className="d-block w-10 " alt="..." /> 
+              </div>
+              <div className="carousel-item">
+                <img src="/images/App.jpg" className="d-block w-10" alt="..."  />
+              </div>
+              <div className="carousel-item">
+                <img src="/images/ver.jpg" className="d-block w-10" alt="..." />
+              </div>
+            </div>
+            <button
+              className="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="prev"
+            >
+              <span className="carousel-control-prev-icon" aria-hidden="true" />
+              <span className="visually-hidden">Previous</span>
+            </button>
+            <button
+              className="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleAutoplaying"
+              data-bs-slide="next"
+            >
+              <span className="carousel-control-next-icon" aria-hidden="true" />
+              <span className="visually-hidden">Next</span>
+            </button>
+          </div>  
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
-              <div className="card m-2" style={{ width: "18rem" }} key={p._id}>
+              <div className="card m-2 shadow-lg" style={{ width: "18rem" }} key={p._id}>
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
@@ -157,7 +197,17 @@ const HomePage = () => {
                   >
                     More Details
                   </button>
-                  <button className="btn btn-secondary ms-1">
+                  <button
+                    className="btn btn-secondary ms-1"
+                    onClick={() => {
+                      setCart([...cart, p]);
+                      localStorage.setItem(
+                        "cart",
+                        JSON.stringify([...cart, p])
+                      );
+                      toast.success("Item Added to cart");
+                    }}
+                  >
                     ADD TO CART
                   </button>
                 </div>

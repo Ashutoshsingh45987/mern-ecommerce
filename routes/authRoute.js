@@ -1,5 +1,5 @@
 import express from "express";
-import {forgotPasswordController, loginController, registerController, testController} from '../controllers/authController.js';
+import {forgotPasswordController, loginController, registerController, testController, updateProfileController} from '../controllers/authController.js';
 import {isAdmin, requireSignIn} from '../middelwares/authMiddleware.js'
 import { get } from "mongoose";
 
@@ -32,5 +32,7 @@ router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
     res.status(200).send({ok:true});
 })
 
+//update profile
+router.put("/profile", requireSignIn, updateProfileController);
 
 export default  router;
